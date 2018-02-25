@@ -1,4 +1,4 @@
-import argparse, sys, requests, hashlib
+import argparse, sys, requests, hashlib, getpass
 '''
 This class uses Troy Hunts https://api.pwnedpasswords.com service to check if a password has been pwned.
 It takes only the first 5 characters of the SHA-1 hashed password, and sends this to the service. It then
@@ -26,7 +26,12 @@ class PwnedPasswordChecker(object):
         else:
             print ('Your password has not been pwned yet!')
         
-        
+
+'''
+You can either run this with a password supplied with the '-p' switch, or just run it.
+When run without the '-p' switch, it'll run in interactive mode and ask you to supply
+a password to check.
+'''        
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("-p", "--password", type=str, help="the password to check")
@@ -34,8 +39,7 @@ if __name__ == "__main__":
     password = (args.password, "") [args.password == None]
     
     if not password:
-        print ("Expected a password string to check - but got nothing!")
-        sys.exit(2)
+        password = getpass.getpass('Enter password to check:')
         
     PwnedPasswordChecker().checkPassword(password)
     sys.exit(0)
